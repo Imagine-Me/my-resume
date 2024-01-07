@@ -250,6 +250,12 @@ export const template1: ITemplate[] = [
           fontWeight: "bold",
         },
         ...skills,
+        ...skills,
+        ...skills,
+        ...skills,
+        ...skills,
+        ...skills,
+        ...skills,
         {
           type: "body1",
           content: "EDUCATION",
