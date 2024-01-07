@@ -32,18 +32,22 @@ const experiences = [
         about: "Keleno is a startup that provides SaaS to real world problems.",
         responsibilities: [
             {
+                project: 'Project 1',
                 description: "Used React, firebase realtime DB to build a Virtual Queue app, that helps users to pick a specific slot for appointment, users can see the number of users in real time and get notifications.",
                 languages: ["ReactJS", "Firebase"]
             },
             {
+                project: 'Project 1',
                 description: "Created a package that mocks sensor data so that we can test the app without the help of real sensors.",
                 languages: ["Python"]
             },
             {
+                project: 'Project 1',
                 description: "Created a module for an existing booking engine app, which shows the economic rooms to users with given criteria ",
                 languages: ["Laravel"]
             },
             {
+                project: 'Project 2',
                 description: "Created a calendar component for an appointment app, which can be modified by given APIs ",
                 languages: ["Vanilla JS"]
             }]
@@ -57,18 +61,22 @@ const experiences = [
         about: "Keleno is a startup that provides SaaS to real world problems.",
         responsibilities: [
             {
+                project: 'Project 1',
                 description: "Used React, firebase realtime DB to build a Virtual Queue app, that helps users to pick a specific slot for appointment, users can see the number of users in real time and get notifications.",
                 languages: ["ReactJS", "Firebase"]
             },
             {
+                project: 'Project 2',
                 description: "Created a package that mocks sensor data so that we can test the app without the help of real sensors.",
                 languages: ["Python"]
             },
             {
+                project: 'Project 3',
                 description: "Created a module for an existing booking engine app, which shows the economic rooms to users with given criteria ",
                 languages: ["Laravel"]
             },
             {
+                project: 'Project 2',
                 description: "Created a calendar component for an appointment app, which can be modified by given APIs ",
                 languages: ["Vanilla JS"]
             }]
@@ -77,19 +85,19 @@ const experiences = [
 
 const links = [
     {
-        link: 'http://google.com',
+        link: 'https://github.com/Imagine-Me',
         content: 'Github'
     },
     {
-        link: 'http://google.com',
+        link: 'https://www.linkedin.com/in/prince-thomas-396b0a16a/',
         content: 'Linkedin'
     },
     {
-        link: 'http://google.com',
+        link: 'https://dev.to/princekizhthara',
         content: 'Dev'
     },
     {
-        link: 'http://google.com',
+        link: 'https://princethomas.dev',
         content: 'Portfolio'
     }
 ]

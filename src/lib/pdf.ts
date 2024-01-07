@@ -1,50 +1,30 @@
-import { jsPDF } from "jspdf";
+import { jsPDF, type TextOptionsLight } from "jspdf";
 import type { IContent, ITemplate } from "src/templates/template.interface";
-
-// Default export is a4 paper, portrait, using millimeters for units
-
-export const generatePDF = () => {
-    const doc = new jsPDF();
-
-    doc.setFont('', 'normal', "bold")
-    doc.setFontSize(32)
-    doc.text('Prince Thomas', 10, 15, { maxWidth: 150 });
-    doc.setFont('', 'normal', "normal")
-    doc.setFontSize(10)
-    doc.text('Team player | Problem solver | Eager to learn | React Developer | Vue Developer', 10, 25, { maxWidth: 150 });
-    doc.text("Church Road, Manjapra, Angamali, Ernakulam 683581", 150, 10, { maxWidth: 50 })
-    doc.setFont('', 'normal', "bold")
-    doc.text('+91 8589852718', 150, 20, { maxWidth: 50 })
-    doc.setFont('', 'underline', "bold")
-    doc.setTextColor('#3ad8b6')
-    const aa = 'princekizhthara@gmail.com Github | Linkedin  | DEV | aa'
-    const a = doc.text(aa, 150, 25, { maxWidth: 50 })
-
-    const textWidth = doc.getTextWidth(aa)
-    console.log(doc.splitTextToSize(aa, 50))
-    doc.text('EXPERIENCE', 10, 30)
-    // doc.save("a4.pdf");
-
-}
 
 const FONT_SIZES = {
     h1: 32,
     body2: 10,
-    normal: 14
+    normal: 14,
+    small: 8
 }
 
-const FONT_COLOR = '#00000'
+const FONT_COLOR = '#1e1d1e'
 const FONT_WEIGHT = 'normal'
 const FONT_STYLE = 'normal'
 const FONT_FAMILY = 'Roboto'
+
+const FULL_WIDTH = 445
 export class GenerateResume {
-    xPos = 20;
-    yPos = 20;
+    xPos = 0;
+    yPos = 0;
+    fullWidth = FULL_WIDTH
     layoutX = this.xPos
     layoutY = this.yPos
     template: ITemplate[];
     _doc;
-    constructor(template: ITemplate[]) {
+    marginX: number;
+    cursor = 0
+    constructor(template: ITemplate[], marginX = 10, marginY = 10) {
         this._doc = new jsPDF({
             orientation: 'p',
             unit: 'px',
@@ -53,37 +33,97 @@ export class GenerateResume {
             floatPrecision: 16,
         })
         this.template = template
+        this.fullWidth = FULL_WIDTH - marginX * 2
+        this.marginX = marginX
     }
 
-    renderText(value: any | any[], maxWidth: number) {
-        const doc = this._doc.text(value, this.layoutX, this.layoutY, { maxWidth })
-        const splittedText = this._doc.splitTextToSize(value, maxWidth)
-        if (splittedText.length > 1) {
-            const blockHeight = (splittedText.length - 1) * doc.getFontSize()
-            this.layoutY += blockHeight
+    renderText(value: string, options: TextOptionsLight, color = FONT_COLOR, link?: string, isList = false) {
+        // if it is not a new line add a space
+        if (this.cursor != this.layoutX) {
+            this.cursor += 4
         }
-        this.layoutY += 5
+        this._doc.setTextColor(color)
+        let maxWidth = (options.maxWidth ?? FULL_WIDTH) - (this.cursor - this.layoutX)
+        if (isList) {
+            maxWidth -= 25
+        }
+        const splittedText = this._doc.splitTextToSize(value, maxWidth ?? 0, { align: options.align })
+        if (link) {
+            this._doc.textWithLink(splittedText[0], this.cursor, this.layoutY, { ...options, maxWidth, url: link })
+        } else {
+            this._doc.text(splittedText[0], this.cursor, this.layoutY, { ...options, maxWidth })
+        }
+        if (splittedText.length > 1) {
+            this.cursor = this.layoutX
+            if (isList) {
+                this.cursor += 20
+            }
+            const newArray = splittedText.slice(1)
+            const joinedText = newArray.join(' ')
+            this.layoutY += this._doc.getFontSize()
+            this.renderText(joinedText, options, undefined, link, isList)
+            return
+        }
         if (this.layoutY > this.yPos) {
             this.yPos = this.layoutY
         }
+        this.cursor += this._doc.getTextWidth(splittedText[0])
     }
 
-    setTextType(content: IContent, maxWidth: number) {
+    setTextType(content: IContent, maxWidth: number, newLine = true, isList = false) {
         this.setFontStyle(content.fontFamily, content.style, content.fontWeight)
         switch (content.type) {
             case 'h1': {
                 this._doc.setFont(FONT_FAMILY, FONT_STYLE, 'bold')
                 this._doc.setFontSize(FONT_SIZES.h1)
-                this.layoutY += FONT_SIZES.h1 / 2
+                if (newLine) {
+                    this.layoutY += FONT_SIZES.h1 / 2
+                    this.cursor = this.layoutX
+                }
                 break;
             }
             case 'body2': {
                 this._doc.setFontSize(FONT_SIZES.body2)
-                this.layoutY += FONT_SIZES.body2 / 2
+                if (newLine) {
+                    this.layoutY += FONT_SIZES.body2 / 2
+                    this.cursor = this.layoutX
+
+                }
                 break;
             }
+            case 'small': {
+                this._doc.setFontSize(FONT_SIZES.small)
+                if (newLine) {
+                    this.layoutY += FONT_SIZES.small / 2
+                    this.cursor = this.layoutX
+
+                }
+                break;
+            }
+            case 'list': {
+                this._doc.setFontSize(FONT_SIZES.body2)
+                if (newLine) {
+                    this.layoutY += FONT_SIZES.body2 / 2
+                    this.cursor = this.layoutX + 10
+                    this.renderText('\u2022 ', { maxWidth })
+                    this.cursor = this.layoutX + 20
+                    // maxWidth -= 20
+                }
+            }
         }
-        this.renderText(content.content, maxWidth)
+
+        if (content.marginTop) {
+            this.layoutY += content.marginTop
+        }
+        const text = content.content
+        if (Array.isArray(text)) {
+            text.forEach(t => {
+                this.setTextType(t, maxWidth, false, content.type === 'list')
+            })
+        } else {
+            const options: TextOptionsLight = { maxWidth, align: content.align }
+            this.renderText(text, options, content.color, content.link, content.type === 'list' || isList)
+        }
         if (content.marginBottom) {
             this.layoutY += content.marginBottom
         }
@@ -92,12 +132,13 @@ export class GenerateResume {
     setFontStyle(family = FONT_FAMILY, style = FONT_STYLE, weight = FONT_WEIGHT) {
         this._doc.setFont(family, style, weight)
         this._doc.setFontSize(FONT_SIZES.normal)
+        this._doc.setTextColor(FONT_COLOR)
     }
 
     render(contents: IContent[], maxWidth: number, x: number, y: number) {
         this.layoutX = x
         this.layoutY = y
-
+        this.cursor = x
         contents.forEach(content => {
             this.setTextType(content, maxWidth)
         })
@@ -106,15 +147,16 @@ export class GenerateResume {
 
     layout({ layout, contents }: ITemplate) {
         const currentX = this.xPos
-        const currentY = this.yPos
+        const currentY = this.yPos + 10
         switch (layout) {
-            case '2/1': {
-                this.render(contents[0], 320, 10, currentY)
-                this.render(contents[1], 110, 320, currentY)
+            case '4/2': {
+                this.render(contents[0], ((this.fullWidth - 5) * 4 / 6), this.marginX, currentY)
+                this.render(contents[1], ((this.fullWidth - 5) * 2 / 6), ((this.fullWidth - 5) * 4 / 6) + 10, currentY)
+                return
             }
             case 'full': {
-                this.render(contents[0], 430, 10, currentY)
-
+                this.render(contents[0], 445, 0, currentY)
+                return
             }
         }
 
