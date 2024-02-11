@@ -1,71 +1,23 @@
 <script lang="ts">
-  import { jsPDF } from "jspdf";
-  import Typography from "src/components/Typography.svelte";
-  import { data } from "src/store/data";
-  let resume: string | HTMLElement;
-
-  import { GenerateResume } from "../lib/pdf";
-  import { template1 } from "src/templates/template1";
-  function generatePDF() {
-    const resume = new GenerateResume(template1, { marginX: 20, marginY: 20 });
-    resume.downloadResume();
-  }
+  import Typography from "src/components/generic/Typography.svelte";
+  import Button from "src/components/generic/Button.svelte";
 </script>
 
-<div bind:this={resume} style="width: 500px; height: 834px;" class="">
-  <div class="flex">
-    <div class="flex-1">
-      <Typography variant="h1">{$data.name}</Typography>
-      <Typography variant="p" className="mt-2 text-xs"
-        >{$data.explain.join(" | ")}</Typography
-      >
-    </div>
-    <div class="w-40">
-      <Typography variant="p" className="text-xs">{$data.address}</Typography>
-      <Typography variant="p" className="font-bold text-xs"
-        >{$data.phoneNumber}</Typography
-      >
-      <Typography variant="p" className="font-bold text-xs"
-        >{$data.email}</Typography
-      >
-    </div>
+<div class="flex w-full m-auto">
+  <div class="w-1/3">
+    <Typography variant="h1">Welcome to ResumeCraft</Typography>
+    <Typography variant="h4" className="mt-5"
+      >Unlock Your Career Potential with Professional Resumes in Minutes!</Typography
+    >
+    <Typography variant="h4" className="mt-5">
+      Are you ready to take the next step in your career? ResumeCraft is here to
+      help you stand out in the job market effortlessly. Our user-friendly
+      platform empowers you to create polished and professional resumes in just
+      a few simple steps.
+    </Typography>
+    <a href="/form?page=personal-info">
+      <Button className="mt-5">Start now</Button>
+    </a>
   </div>
-  <div class="flex mt-3 gap-2">
-    <div class="flex-1">
-      <Typography variant="p" className="font-bold mb-3 text-sky-500"
-        >EXPERIENCE</Typography
-      >
-      {#each $data.experiences as experience}
-        <div class="mb-3">
-          <Typography variant="p">
-            <span class="font-bold">{experience.title}</span>,
-            <span>{experience.place}</span> -
-            <span class="italic">{experience.role}</span>
-          </Typography>
-          <Typography variant="p">{experience.about}</Typography>
-          <ul class="list-disc">
-            {#each experience.responsibilities as responsibility}
-              <li>
-                {responsibility.description} [{responsibility.languages.join(
-                  ", ",
-                )}]
-              </li>
-            {/each}
-          </ul>
-        </div>
-      {/each}
-    </div>
-    <div class="w-40">
-      <Typography variant="p" className="font-bold mb-3 text-sky-500"
-        >SKILLS</Typography
-      >
-      {#each $data.skills as skill}
-        <div class="mb-3">
-          <span class="font-bold">{skill.type}: </span>
-          <span>{skill.value.join(", ")}</span>
-        </div>
-      {/each}
-    </div>
-  </div>
+  <div class="w-2/3">Templates here</div>
 </div>
-<button class="p-3 bg-red-500" on:click={generatePDF}>Generate</button>
