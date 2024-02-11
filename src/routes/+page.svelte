@@ -15,7 +15,7 @@
       platform empowers you to create polished and professional resumes in just
       a few simple steps.
     </Typography>
-    <a href="/form?page=personal-info">
+    <a href="/form">
       <Button className="mt-5">Start now</Button>
     </a>
   </div>

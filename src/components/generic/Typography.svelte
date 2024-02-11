@@ -7,10 +7,10 @@
       className = `text-6xl font-bold leading-h1 ${className}`;
       break;
     case "h2":
-      className = `text-3xl ${className}`;
+      className = `text-5xl ${className}`;
       break;
     case "h3":
-      className = `text-2xl ${className}`;
+      className = `text-4xl ${className}`;
       break;
     case "h4":
       className = `text-2xl ${className}`;

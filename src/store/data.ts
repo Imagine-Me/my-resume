@@ -368,17 +368,26 @@ const projects = [
 ];
 
 export const initialData = {
-  name: "Prince Thomas",
-  explain: ["Team player", "Problem solver", "Eager to learn"],
-  address:
-    "Church Road, Manjapra, Angamali, Ernakulam , 683581 asdasdasd as asdasd asdasdasd",
-  phoneNumber: "+91 8589852718",
-  email: "princekizhtdsfsdfsdhara@gmail.com",
-  skills,
-  experiences,
-  links,
-  education,
-  projects,
+  // name: "Prince Thomas",
+  // explain: ["Team player", "Problem solver", "Eager to learn"],
+  // address:
+  //   "Church Road, Manjapra, Angamali, Ernakulam , 683581 asdasdasd as asdasd asdasdasd",
+  // phoneNumber: "+91 8589852718",
+  // email: "princekizhtdsfsdfsdhara@gmail.com",
+  // skills,
+  // experiences,
+  // links,
+  // education,
+  // projects,
+  personalInfo: {
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+  },
+  about: {
+    description: "",
+  },
 };
 
 function createData() {
