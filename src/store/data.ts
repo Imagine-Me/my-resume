@@ -391,7 +391,7 @@ export const initialData = {
   // education,
   // projects,
   personalInfo: {
-    name: "prince",
+    name: "",
     phone: "",
     email: "",
     address: "",
@@ -399,7 +399,19 @@ export const initialData = {
   about: {
     description: "",
     shortDescription: [],
+    socialMedia: [
+      {
+        link: "",
+        name: "",
+      },
+    ],
   },
+  skills: [
+    {
+      type: "",
+      value: [] as string[],
+    },
+  ],
 };
 
 function createData() {
@@ -408,8 +420,14 @@ function createData() {
     ...hydratedData,
   });
 
-  const changeForm = (section: keyof typeof initialData, payload: Object) =>
+  const changeForm = (
+    section: keyof typeof initialData,
+    payload: Object | Array<string>,
+  ) =>
     update((value) => {
+      if (Array.isArray(payload)) {
+        return { ...value, [section]: payload };
+      }
       const data = { ...value[section], ...payload };
       return { ...value, [section]: data };
     });
