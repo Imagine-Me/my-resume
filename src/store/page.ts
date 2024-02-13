@@ -5,7 +5,7 @@ const pages = Object.keys(data);
 
 const urlParams = new URLSearchParams(window.location.search);
 const param = urlParams.get("page") ?? "";
-const currentForm = pages.includes(param) ? param : "PersonalInfo";
+const currentForm = pages.includes(param) ? param : pages[0];
 
 const initialData = {
   currentForm,
@@ -35,6 +35,3 @@ export const pageData = derived(page.page, ($page) => {
     current,
   };
 });
-
-// () => {
-// };

@@ -4,7 +4,6 @@
   export let label = "",
     placeholder = "",
     value = "",
-    className = "",
     name: string;
   const dispatch = createEventDispatcher();
 
@@ -14,11 +13,11 @@
   }
 </script>
 
-<div class={`flex flex-col ${className}`}>
+<div class="flex flex-col">
   {#if label}
     <label for={name} class="text-lg font-bold tracking-wide">{label}</label>
   {/if}
-  <input
+  <textarea
     {name}
     {placeholder}
     bind:value

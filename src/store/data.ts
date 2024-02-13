@@ -367,6 +367,17 @@ const projects = [
   },
 ];
 
+let localData = localStorage.getItem("resume_craft_data");
+
+let hydratedData = {};
+if (localData) {
+  try {
+    hydratedData = JSON.parse(localData);
+  } catch {
+    console.log("ISSUE WHILE PARSING DATA");
+  }
+}
+
 export const initialData = {
   // name: "Prince Thomas",
   // explain: ["Team player", "Problem solver", "Eager to learn"],
@@ -380,21 +391,34 @@ export const initialData = {
   // education,
   // projects,
   personalInfo: {
-    name: "",
+    name: "prince",
     phone: "",
     email: "",
     address: "",
   },
   about: {
     description: "",
+    shortDescription: [],
   },
 };
 
 function createData() {
-  const { subscribe, set, update } = writable(initialData);
+  const { subscribe, set, update } = writable({
+    ...initialData,
+    ...hydratedData,
+  });
 
-  return { subscribe };
+  const changeForm = (section: keyof typeof initialData, payload: Object) =>
+    update((value) => {
+      const data = { ...value[section], ...payload };
+      return { ...value, [section]: data };
+    });
+  return { subscribe, changeForm };
 }
 
 export const data = createData();
-export const readableData = get(data);
+
+data.subscribe((value) => {
+  console.log(value);
+  localStorage.setItem("resume_craft_data", JSON.stringify(value));
+});

@@ -7,7 +7,9 @@
 </script>
 
 <Typography variant="h2">{header} - {current}/{total}</Typography>
-<slot />
+<div class="py-8">
+  <slot />
+</div>
 
 <div class="flex mt-8 justify-between">
   <div>
