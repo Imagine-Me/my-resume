@@ -304,6 +304,14 @@ const education = [
   },
 ];
 
+export interface IEducation {
+  name: string;
+  place: string;
+  degree: string;
+  from: string;
+  to: string;
+}
+
 const projects = [
   {
     name: "PollApp",
@@ -412,6 +420,7 @@ export const initialData = {
       value: [] as string[],
     },
   ],
+  educations: [] as IEducation[],
 };
 
 function createData() {

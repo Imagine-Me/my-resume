@@ -22,10 +22,18 @@ export const placeHolders = {
     type: "Framework",
     value: "React or Vue JS or Svelte",
   },
+  educations: {
+    name: "Institution name",
+    place: "Kochi",
+    degree: "Bachelors in Computer Science",
+    from: "JUNE 2014",
+    to: "JULY 2017",
+  },
 };
 
 export const keyTitles: Record<keyof typeof initialData, string> = {
   about: "About",
   personalInfo: "Personal Info",
   skills: "Skills",
+  educations: "Education",
 };
