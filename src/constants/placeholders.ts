@@ -44,6 +44,16 @@ export const placeHolders = {
       technologiesUsed: "ReactJS, Redux",
     },
   },
+  projects: {
+    name: "Project name",
+    shortDescription: "A short description about project",
+    description: "Explain what did you do and what does app do",
+    technologies: "ReactJS, Redux",
+    links: {
+      name: "Github",
+      link: "http://github.com",
+    },
+  },
 };
 
 export const keyTitles: Record<keyof typeof initialData, string> = {
@@ -52,4 +62,5 @@ export const keyTitles: Record<keyof typeof initialData, string> = {
   skills: "Skills",
   educations: "Education",
   experiences: "Experiences",
+  projects: "Projects",
 };
