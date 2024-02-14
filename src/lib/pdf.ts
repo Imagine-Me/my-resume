@@ -316,6 +316,6 @@ export class GenerateResume {
 
   downloadResume() {
     this.generate();
-    this.doc.save("a4.pdf");
+    this.doc.save("Resume.pdf");
   }
 }

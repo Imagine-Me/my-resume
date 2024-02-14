@@ -6,7 +6,6 @@
     open = false;
 
   function toggleAccordion() {
-    console.log(header, open);
     open = !open;
   }
 </script>
