@@ -29,6 +29,21 @@ export const placeHolders = {
     from: "JUNE 2014",
     to: "JULY 2017",
   },
+  experiences: {
+    company: "Company 1",
+    role: "Software engineer",
+    place: "Kochi",
+    from: "June 2022",
+    to: "Present",
+    about:
+      "Company 1 is a full-service software provider enabling enterprises to apply digital technology in their business context through data-driven solutions for mobile, cloud, and web platforms. ",
+    responsibilities: {
+      project: "Project 1",
+      description:
+        "What is this project about?. What did you do in project?. How it helped the company?",
+      technologiesUsed: "ReactJS, Redux",
+    },
+  },
 };
 
 export const keyTitles: Record<keyof typeof initialData, string> = {
@@ -36,4 +51,5 @@ export const keyTitles: Record<keyof typeof initialData, string> = {
   personalInfo: "Personal Info",
   skills: "Skills",
   educations: "Education",
+  experiences: "Experiences",
 };

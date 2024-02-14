@@ -312,6 +312,22 @@ export interface IEducation {
   to: string;
 }
 
+export interface IResponsibilities {
+  project: string;
+  description: string;
+  technologiesUsed: string[];
+}
+
+export interface IExperience {
+  company: string;
+  role: string;
+  place: string;
+  from: string;
+  to: string;
+  about: string;
+  responsibilities: IResponsibilities[];
+}
+
 const projects = [
   {
     name: "PollApp",
@@ -421,6 +437,7 @@ export const initialData = {
     },
   ],
   educations: [] as IEducation[],
+  experiences: [] as IExperience[],
 };
 
 function createData() {
