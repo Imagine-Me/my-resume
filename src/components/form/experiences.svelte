@@ -14,6 +14,9 @@
   import TextArea from "../generic/TextArea.svelte";
   let experiences = [...$data.experiences];
 
+  let experienceAccordion = -1;
+  let responsibilityAccordion = -1;
+
   function removeItem(index: number) {
     const updatedExperiences = [...experiences];
     updatedExperiences.splice(index, 1);
@@ -36,6 +39,8 @@
     ];
     experiences = updatedExperiences;
     data.changeForm("experiences", experiences);
+    experienceAccordion = updatedExperiences.length - 1;
+    responsibilityAccordion = -1;
   }
 
   function addMoreResponsibility(i: number) {
@@ -47,6 +52,7 @@
     updatedExperiences[i].responsibilities = updatedResponsibilities;
     experiences = updatedExperiences;
     data.changeForm("experiences", experiences);
+    responsibilityAccordion = updatedResponsibilities.length - 1;
   }
 
   function changeValue(i: number, key: keyof IExperience, value: string) {
@@ -72,12 +78,32 @@
     experiences = updatedExperiences;
     data.changeForm("experiences", experiences);
   }
+  const toggleExperienceAccordion = (index: number) => (isOpen: boolean) => {
+    responsibilityAccordion = -1;
+    if (isOpen) {
+      experienceAccordion = index;
+    } else {
+      experienceAccordion = -1;
+    }
+  };
+  const toggleResponsibilityAccordion =
+    (index: number) => (isOpen: boolean) => {
+      if (isOpen) {
+        responsibilityAccordion = index;
+      } else {
+        responsibilityAccordion = -1;
+      }
+    };
 </script>
 
 <FormLayout header="Experiences">
   <div class="grid gap-4">
     {#each experiences as experience, i (i)}
-      <Accordion header={experience.company || "Company name"} open={true}>
+      <Accordion
+        header={experience.company || "Company name"}
+        open={experienceAccordion === i}
+        onAccordionClicked={toggleExperienceAccordion(i)}
+      >
         <button
           on:click={() => removeItem(i)}
           class="px-4 text-white bg-red-500 rounded"
@@ -133,7 +159,8 @@
           {#each experience.responsibilities as responsibility, k (k)}
             <Accordion
               header={responsibility.project || "Project Name"}
-              open={true}
+              open={responsibilityAccordion === k}
+              onAccordionClicked={toggleResponsibilityAccordion(k)}
             >
               <button
                 on:click={() => removeItem(i)}

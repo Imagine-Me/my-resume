@@ -8,6 +8,8 @@
 
   let educations = [...$data.educations];
 
+  let openedAccordion = -1;
+
   function changeData(i: number, key: keyof IEducation, value: string) {
     const updatedEducations = [...educations];
     updatedEducations[i][key] = value;
@@ -28,13 +30,25 @@
     ];
     educations = updatedEducations;
     data.changeForm("educations", educations);
+    openedAccordion = updatedEducations.length - 1;
   }
+  const toggleAccordion = (index: number) => (isOpen: boolean) => {
+    if (isOpen) {
+      openedAccordion = index;
+    } else {
+      openedAccordion = -1;
+    }
+  };
 </script>
 
 <FormLayout header="Education">
   <div class="grid gap-4">
     {#each educations as education, i (i)}
-      <Accordion header={education.name || "Description"} open={true}>
+      <Accordion
+        header={education.name || "Description"}
+        open={i === openedAccordion}
+        onAccordionClicked={toggleAccordion(i)}
+      >
         <button
           on:click={() => removeItem(i)}
           class="px-4 text-white bg-red-500 rounded"

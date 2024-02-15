@@ -8,6 +8,8 @@
   import { placeHolders } from "src/constants/placeholders";
 
   let skills = [...$data.skills];
+  let openedAccordion = -1;
+
   function changeCategory(i: number, value: string) {
     const updatedSkills = [...skills];
     updatedSkills[i].type = value;
@@ -26,6 +28,7 @@
     const updatedSkills = [...skills, { type: "", value: [] }];
     skills = updatedSkills;
     data.changeForm("skills", skills);
+    openedAccordion = updatedSkills.length - 1;
   }
 
   function removeItem(index: number) {
@@ -34,12 +37,24 @@
     skills = updatedSkills;
     data.changeForm("skills", skills);
   }
+
+  const toggleAccordion = (index: number) => (isOpen: boolean) => {
+    if (isOpen) {
+      openedAccordion = index;
+    } else {
+      openedAccordion = -1;
+    }
+  };
 </script>
 
 <FormLayout header="Skills">
   <div class="grid gap-4">
     {#each skills as skill, i (i)}
-      <Accordion header={skill.type || "Description"} open={true}>
+      <Accordion
+        header={skill.type || "Description"}
+        open={openedAccordion === i}
+        onAccordionClicked={toggleAccordion(i)}
+      >
         <button
           on:click={() => removeItem(i)}
           class="px-4 text-white bg-red-500 rounded"

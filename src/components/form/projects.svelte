@@ -10,6 +10,8 @@
   import Typography from "../generic/Typography.svelte";
 
   let projects = [...$data.projects];
+  let projectAccordion = -1;
+  let linkAccordion = -1;
 
   function removeItem(index: number) {
     const updatedProjects = [...projects];
@@ -38,6 +40,7 @@
     ];
     projects = updatedProjects;
     data.changeForm("projects", projects);
+    projectAccordion = updatedProjects.length - 1;
   }
 
   function addMoreLinks(i: number) {
@@ -48,6 +51,7 @@
     ];
     projects = updatedProjects;
     data.changeForm("projects", projects);
+    linkAccordion = updatedProjects[i].links.length - 1;
   }
 
   function changeLink(
@@ -63,71 +67,99 @@
     projects = updatedProjects;
     data.changeForm("projects", projects);
   }
+
+  const toggleProjectAccordion = (index: number) => (isOpen: boolean) => {
+    linkAccordion = -1;
+    if (isOpen) {
+      projectAccordion = index;
+    } else {
+      projectAccordion = -1;
+    }
+  };
+  const toggleLinkAccordion = (index: number) => (isOpen: boolean) => {
+    if (isOpen) {
+      linkAccordion = index;
+    } else {
+      linkAccordion = -1;
+    }
+  };
 </script>
 
 <FormLayout header="Projects">
-  {#each projects as project, i (i)}
-    <Accordion header={project.name || "Project name"} open={true}>
-      <button
-        on:click={() => removeItem(i)}
-        class="px-4 text-white bg-red-500 rounded"
-        slot="icons">Delete</button
+  <div class="grid gap-2">
+    {#each projects as project, i (i)}
+      <Accordion
+        header={project.name || "Project name"}
+        open={i === projectAccordion}
+        onAccordionClicked={toggleProjectAccordion(i)}
       >
-      <TextField
-        bind:value={project.name}
-        name="name"
-        label="Name"
-        placeholder={placeHolders.projects.name}
-        on:input={(e) => changeValue(i, "name", e.detail)}
-      />
-      <TextField
-        bind:value={project.shortDescription}
-        name="shortDescription"
-        label="Short description of project"
-        placeholder={placeHolders.projects.shortDescription}
-        on:input={(e) => changeValue(i, "shortDescription", e.detail)}
-      />
-
-      <TextArea
-        bind:value={project.description}
-        name="description"
-        label="Description"
-        placeholder={placeHolders.projects.description}
-        on:input={(e) => changeValue(i, "description", e.detail)}
-      />
-      <div>
-        <MultiTextfield
-          bind:values={project.technologies}
-          className="mt-2"
-          name="technologiesUsed"
-          label="Technology Used"
-          placeholder={placeHolders.projects.technologies}
-          on:input={(e) => changeValue(i, "technologies", e.detail)}
+        <button
+          on:click={() => removeItem(i)}
+          class="px-4 text-white bg-red-500 rounded"
+          slot="icons">Delete</button
+        >
+        <TextField
+          bind:value={project.name}
+          name="name"
+          label="Name"
+          placeholder={placeHolders.projects.name}
+          on:input={(e) => changeValue(i, "name", e.detail)}
         />
-      </div>
-      <Typography variant="h4">Links</Typography>
-      <div class="grid gap-2">
-        {#each project.links as link, k (k)}
-          <Accordion header={link.name || "Link"} open={true}>
-            <TextField
-              bind:value={link.name}
-              name="link_name"
-              label="Name"
-              placeholder={placeHolders.projects.links.name}
-              on:input={(e) => changeLink(i, k, "name", e.detail)}
-            />
-            <TextField
-              bind:value={link.link}
-              name="link_link"
-              label="Link"
-              placeholder={placeHolders.projects.links.link}
-              on:input={(e) => changeLink(i, k, "link", e.detail)}
-            /></Accordion
-          >
-        {/each}
-      </div>
-      <Button className="mt-4" onClick={() => addMoreLinks(i)}>Add more</Button>
-    </Accordion>
-  {/each}
+        <TextField
+          bind:value={project.shortDescription}
+          name="shortDescription"
+          label="Short description of project"
+          placeholder={placeHolders.projects.shortDescription}
+          on:input={(e) => changeValue(i, "shortDescription", e.detail)}
+        />
+
+        <TextArea
+          bind:value={project.description}
+          name="description"
+          label="Description"
+          placeholder={placeHolders.projects.description}
+          on:input={(e) => changeValue(i, "description", e.detail)}
+        />
+        <div>
+          <MultiTextfield
+            bind:values={project.technologies}
+            className="mt-2"
+            name="technologiesUsed"
+            label="Technology Used"
+            placeholder={placeHolders.projects.technologies}
+            on:input={(e) => changeValue(i, "technologies", e.detail)}
+          />
+        </div>
+        <Typography variant="h4">Links</Typography>
+        <div class="grid gap-2">
+          {#each project.links as link, k (k)}
+            <Accordion
+              header={link.name || "Link"}
+              open={k === linkAccordion}
+              onAccordionClicked={toggleLinkAccordion(k)}
+            >
+              <TextField
+                bind:value={link.name}
+                name="link_name"
+                label="Name"
+                placeholder={placeHolders.projects.links.name}
+                on:input={(e) => changeLink(i, k, "name", e.detail)}
+              />
+              <TextField
+                bind:value={link.link}
+                name="link_link"
+                label="Link"
+                placeholder={placeHolders.projects.links.link}
+                on:input={(e) => changeLink(i, k, "link", e.detail)}
+              /></Accordion
+            >
+          {/each}
+        </div>
+        <Button className="mt-4" onClick={() => addMoreLinks(i)}
+          >Add more</Button
+        >
+      </Accordion>
+    {/each}
+  </div>
   <Button className="mt-4" onClick={addMore}>Add more</Button>
 </FormLayout>

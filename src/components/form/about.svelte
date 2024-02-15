@@ -10,6 +10,15 @@
   import TextField from "../generic/TextField.svelte";
   const { about } = $data;
   let socialMedia = [...about.socialMedia];
+  let openedAccordion = -1;
+
+  const toggleAccordion = (index: number) => (isOpen: boolean) => {
+    if (isOpen) {
+      openedAccordion = index;
+    } else {
+      openedAccordion = -1;
+    }
+  };
 
   function changeLink(i: number, value: string) {
     const updatedSkills = [...socialMedia];
@@ -29,6 +38,7 @@
     const updatedSkills = [...socialMedia, { link: "", name: "" }];
     socialMedia = updatedSkills;
     data.changeForm("about", { socialMedia });
+    openedAccordion = updatedSkills.length - 1;
   }
 
   function removeItem(index: number) {
@@ -59,7 +69,11 @@
   <Typography variant="h4" className="my-2">Social media</Typography>
   <div class="grid gap-4">
     {#each socialMedia as item, i (i)}
-      <Accordion header={item.name || "Description"} open={true}>
+      <Accordion
+        header={item.name || "Description"}
+        open={openedAccordion === i}
+        onAccordionClicked={toggleAccordion(i)}
+      >
         <button
           on:click={() => removeItem(i)}
           class="px-4 text-white bg-red-500 rounded"
