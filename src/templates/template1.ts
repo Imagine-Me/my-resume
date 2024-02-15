@@ -242,7 +242,10 @@ export const template1 = (data = initialData): ITemplate[] => {
           },
           {
             type: "body2",
-            content: getLinks(about.socialMedia).slice(0, getLinks.length - 1),
+            content: getLinks(about.socialMedia).slice(
+              0,
+              getLinks(about.socialMedia).length - 1,
+            ),
           },
         ],
       ],

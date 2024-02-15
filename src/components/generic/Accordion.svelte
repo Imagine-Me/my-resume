@@ -3,17 +3,14 @@
   import { slide } from "svelte/transition";
 
   export let header = "",
-    open = false;
-
-  function toggleAccordion() {
-    open = !open;
-  }
+    open = false,
+    onAccordionClicked: (value: boolean) => void;
 </script>
 
 <div role="button" tabindex="0" class="rounded border-2 border-white">
   <a
     class="flex justify-between p-4 bg-white rounded-t"
-    on:click={toggleAccordion}
+    on:click={() => onAccordionClicked(!open)}
   >
     <Typography variant="h4" className="text-background">{header}</Typography>
     <slot name="icons" />
